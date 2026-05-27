@@ -33,9 +33,10 @@ def _agrupar_con_subtotales(df):
     bloques = []
     for cuit, grupo in df.groupby('CUIT Librador', sort=False, dropna=False):
         bloques.append(grupo)
-        fila_sum = pd.DataFrame([{c: None for c in df.columns}])
-        fila_sum.at[0, 'Importe'] = grupo['Importe'].sum()
-        bloques.append(fila_sum)
+        if len(grupo) > 1:
+            fila_sum = pd.DataFrame([{c: None for c in df.columns}])
+            fila_sum.at[0, 'Importe'] = grupo['Importe'].sum()
+            bloques.append(fila_sum)
 
     return pd.concat(bloques, ignore_index=True)
 

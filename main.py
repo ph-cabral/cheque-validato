@@ -43,14 +43,6 @@ if __name__ == "__main__":
     # Evento para detener la animación
     stop_event = threading.Event()
 
-    # # Iniciar animación en hilo separado
-    # hilo_animacion = threading.Thread(
-    #     target=correr_animacion,
-    #     args=(stop_event,),
-    #     daemon=True
-    # )
-    # hilo_animacion.start()
-
     try:
         # Ejecutar proceso principal
         proceso_principal()

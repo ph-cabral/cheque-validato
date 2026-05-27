@@ -1,7 +1,7 @@
 import os
 import threading
 
-from animacion import correr_animacion
+# from animacion import correr_animacion
 from requirements_manager import instalar_requerimientos
 
 instalar_requerimientos()
@@ -25,7 +25,6 @@ def proceso_principal():
     )
     
     df = obtener_ultima_tabla(df_origen.iloc[:, :21])
-
     df_codigos = pd.read_excel(
         "../codigos_bancos.xlsx",
         header=None,
@@ -44,13 +43,13 @@ if __name__ == "__main__":
     # Evento para detener la animación
     stop_event = threading.Event()
 
-    # Iniciar animación en hilo separado
-    hilo_animacion = threading.Thread(
-        target=correr_animacion,
-        args=(stop_event,),
-        daemon=True
-    )
-    hilo_animacion.start()
+    # # Iniciar animación en hilo separado
+    # hilo_animacion = threading.Thread(
+    #     target=correr_animacion,
+    #     args=(stop_event,),
+    #     daemon=True
+    # )
+    # hilo_animacion.start()
 
     try:
         # Ejecutar proceso principal
@@ -66,6 +65,7 @@ if __name__ == "__main__":
         raise
         
     finally:
-        # Detener animación
         stop_event.set()
-        
+        # Avisar al .bat que terminó
+        with open("terminado.flag", "w") as f:
+            f.write("done")

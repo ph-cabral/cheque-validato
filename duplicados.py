@@ -110,28 +110,28 @@ def controlar_duplicados(df):
 # ============================================
 # CÓDIGO DE PRUEBA (comentar en producción)
 # ============================================
-if __name__ == "__main__":
-    # Crear DataFrame de prueba
-    df_test = pd.DataFrame({
-        'ID': ['001', '002', '003', '004', '005'],
-        'Nombre': ['A', 'B', 'C', 'D', 'E']
-    })
+# if __name__ == "__main__":
+#     # Crear DataFrame de prueba
+#     df_test = pd.DataFrame({
+#         'ID': ['001', '002', '003', '004', '005'],
+#         'Nombre': ['A', 'B', 'C', 'D', 'E']
+#     })
     
-    # print("\n=== Prueba 1: Primera ejecución ===")
-    resultado = controlar_duplicados(df_test)
-    # print(f"IDs procesados: {len(resultado)}\n")
+#     # print("\n=== Prueba 1: Primera ejecución ===")
+#     resultado = controlar_duplicados(df_test)
+#     # print(f"IDs procesados: {len(resultado)}\n")
     
-    # print("=== Prueba 2: Con duplicados ===")
-    df_test2 = pd.DataFrame({
-        'ID': ['003', '004', '006'],  # 003 y 004 son duplicados
-        'Nombre': ['C', 'D', 'F']
-    })
-    resultado = controlar_duplicados(df_test2)
-    # print(f"IDs nuevos: {len(resultado)}")
-    # print(f"IDs filtrados: {resultado['ID'].tolist()}\n")
+#     # print("=== Prueba 2: Con duplicados ===")
+#     df_test2 = pd.DataFrame({
+#         'ID': ['003', '004', '006'],  # 003 y 004 son duplicados
+#         'Nombre': ['C', 'D', 'F']
+#     })
+#     resultado = controlar_duplicados(df_test2)
+#     # print(f"IDs nuevos: {len(resultado)}")
+#     # print(f"IDs filtrados: {resultado['ID'].tolist()}\n")
     
-    # print("=== Prueba 3: Simulando archivo corrupto ===")
-    # Crear archivo vacío
-    pd.DataFrame().to_excel("control.xlsx", index=False)
-    resultado = controlar_duplicados(df_test)
-    # print(f"IDs procesados tras recuperación: {len(resultado)}\n")
+#     # print("=== Prueba 3: Simulando archivo corrupto ===")
+#     # Crear archivo vacío
+#     pd.DataFrame().to_excel("control.xlsx", index=False)
+#     resultado = controlar_duplicados(df_test)
+#     # print(f"IDs procesados tras recuperación: {len(resultado)}\n")

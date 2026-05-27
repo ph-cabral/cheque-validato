@@ -83,3 +83,39 @@ def ajustar_ancho_excel(nombre_archivo):
                 max_length = max(max_length, len(str(cell.value)))
         ws.column_dimensions[col_letter].width = max_length + 2
     wb.save(nombre_archivo)
+
+
+def formatear_excel(nombre_archivo, col_importe='Importe'):
+    """Ajusta ancho de columnas y formatea Importe como moneda ARS."""
+    wb = load_workbook(nombre_archivo)
+    ws = wb.active
+
+    # Detectar índice de la columna Importe (fila 1 = headers)
+    idx_importe = None
+    for cell in ws[1]:
+        if cell.value == col_importe:
+            idx_importe = cell.column
+            break
+
+    # Formato moneda ARS en toda la columna Importe
+    if idx_importe:
+        letra = get_column_letter(idx_importe)
+        for cell in ws[letra][1:]:  # saltar header
+            if isinstance(cell.value, (int, float)):
+                cell.number_format = '"$"#,##0.00'
+
+    # Ajustar ancho según contenido (considerando formato visible)
+    for col in ws.columns:
+        max_length = 0
+        letra = get_column_letter(col[0].column)
+        for cell in col:
+            if cell.value is None:
+                continue
+            if cell.column == idx_importe and isinstance(cell.value, (int, float)):
+                texto = f"${cell.value:,.2f}"
+            else:
+                texto = str(cell.value)
+            max_length = max(max_length, len(texto))
+        ws.column_dimensions[letra].width = max_length + 2
+
+    wb.save(nombre_archivo)

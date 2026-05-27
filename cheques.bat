@@ -1,7 +1,8 @@
 @echo off
 setlocal
-cd /d "%~dp0"
+pushd "%~dp0"
 call ent\Scripts\activate.bat
 python main.py
+popd
 endlocal
-exit
+pause

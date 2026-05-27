@@ -1,7 +1,6 @@
 import os
 import threading
-
-# from animacion import correr_animacion
+from animacion import correr_animacion
 from requirements_manager import instalar_requerimientos
 
 instalar_requerimientos()

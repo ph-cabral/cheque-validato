@@ -26,7 +26,7 @@ def proceso_principal():
     
     df = obtener_ultima_tabla(df_origen.iloc[:, :21])
     df_codigos = pd.read_excel(
-        "./codigos_bancos.xlsx",
+        "codigos_bancos.xlsx",
         header=None,
         names=['Codigo', 'NombreBanco']
     )

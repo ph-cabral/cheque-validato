@@ -53,24 +53,16 @@ def _agrupar_con_subtotales(df):
 
 
 def dividir_por_responsable(df):
-    # for i, col in enumerate(df.columns):
-    #     print(i, col)
-    # df = df[columns_mag]
-    # print('......................................')
-    # for i, col in enumerate(df.columns):
-    #     print(i, col)
 
     vals = df['Responsable'].fillna('').astype(str).str.strip().str.lower()
     df['Importe'] = df['Importe'].astype(float)
     df['Número Cheque'] = df['Número Cheque'].astype(int)
-    df['Código Banco'] = df['Número Cheque'].astype(int)
-    df['Plaza Código Postal'] = df['Número Cheque'].astype(int)
+    df['Código Banco'] = df['Código Banco'].astype(int)
+    df['Plaza Código Postal'] = df['Plaza Código Postal'].astype(int)
+    df['CUIT Librador'] = df['CUIT Librador'].astype(int)
     
     df_martin = df[vals.str.contains('martin|contado', na=False)].copy()
     df_lorena = df[vals.str.contains('lore g|anticipado', na=False)].copy()
-
-    df_martin[columns_mag].to_excel("../martin.xlsx", index=False, sheet_name="Sheet 1")
-    df_lorena[columns_mag].to_excel("../lorena.xlsx", index=False, sheet_name="Sheet 1")
 
     _agrupar_con_subtotales(df_martin[columns]).to_excel(
         "../martin_sumados.xlsx", index=False, sheet_name="Sheet 1"
@@ -78,6 +70,13 @@ def dividir_por_responsable(df):
     _agrupar_con_subtotales(df_lorena[columns]).to_excel(
         "../lorena_sumados.xlsx", index=False, sheet_name="Sheet 1"
     )
+    
+    df_martin['Nombre Banco'] = ''
+    df_lorena['Nombre Banco'] = ''
+    
+    df_martin[columns_mag].to_excel("../martin.xlsx", index=False, sheet_name="Sheet 1")
+    df_lorena[columns_mag].to_excel("../lorena.xlsx", index=False, sheet_name="Sheet 1")
+    
     formatear_excel("../lorena_sumados.xlsx")
     formatear_excel("../martin_sumados.xlsx")
 

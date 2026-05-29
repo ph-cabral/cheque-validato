@@ -85,26 +85,36 @@ def ajustar_ancho_excel(nombre_archivo):
     wb.save(nombre_archivo)
 
 
+from openpyxl.styles import PatternFill, Font
+
 def formatear_excel(nombre_archivo, col_importe='Importe'):
-    """Ajusta ancho de columnas y formatea Importe como moneda ARS."""
     wb = load_workbook(nombre_archivo)
     ws = wb.active
 
-    # Detectar índice de la columna Importe (fila 1 = headers)
     idx_importe = None
     for cell in ws[1]:
         if cell.value == col_importe:
             idx_importe = cell.column
             break
 
-    # Formato moneda ARS en toda la columna Importe
+    fill_subtotal = PatternFill(start_color="FFF2CC", end_color="FFF2CC", fill_type="solid")
+    font_subtotal = Font(bold=True)
+
     if idx_importe:
         letra = get_column_letter(idx_importe)
-        for cell in ws[letra][1:]:  # saltar header
+        for cell in ws[letra][1:]:
             if isinstance(cell.value, (int, float)):
                 cell.number_format = '"$"#,##0.00'
 
-    # Ajustar ancho según contenido (considerando formato visible)
+        # Colorear filas de subtotal: solo tienen valor en Importe
+        for row in ws.iter_rows(min_row=2):
+            otras = [c.value for c in row if c.column != idx_importe]
+            importe_val = row[idx_importe - 1].value
+            if all(v is None for v in otras) and isinstance(importe_val, (int, float)):
+                for cell in row:
+                    cell.fill = fill_subtotal
+                    cell.font = font_subtotal
+
     for col in ws.columns:
         max_length = 0
         letra = get_column_letter(col[0].column)

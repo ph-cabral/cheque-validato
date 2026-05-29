@@ -38,7 +38,6 @@ def generar_cheques_rechazados(cuits):
     for cuit in cuits:
         cuit = str(int(cuit)).strip()
         intentos = 3  # reintentos por si falla
-        print(cuit)
         while intentos > 0:
             try:
                 r = session.get(
@@ -84,16 +83,13 @@ def generar_cheques_rechazados(cuits):
                     time.sleep(5)  # esperar más antes de reintentar
                 else:
                     print(f"CUIT {cuit} omitido por error de conexión")
-                print("nope1")
 
             except requests.exceptions.Timeout:
                 print(f"Timeout para CUIT {cuit}, omitiendo...")
-                print("nope2")
                 break
 
             except Exception as e:
                 print(f"Error inesperado para CUIT {cuit}: {e}")
-                print("nope3")
                 break
 
         time.sleep(3)  # pausa entre cada CUIT

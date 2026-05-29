@@ -25,6 +25,8 @@ def procesar_cheques(df, df_codigos):
     df_nuevo["ID"] = df.get('ID del cheque', '')
     df_nuevo['Fecha Recepción'] = fecha_recepcion
     df_nuevo['Importe'] = df.get('Importe', '')
+    df_nuevo['Dueño'] = df.iloc[:, 2]
+    df_nuevo['Cliente CUIT/CUIL/CDI'] = df.iloc[:, 3]
     df_nuevo['Es Cheque Electrónico SI o NO'] = 'SI'
 
     df_nuevo['Fecha Emisión'] = df['Fecha de emisión'].dt.strftime('%d/%m/%Y')
@@ -32,16 +34,17 @@ def procesar_cheques(df, df_codigos):
     df_nuevo['Fecha Acreditación'] = (df['Fecha de pago'] + pd.Timedelta(days=2)).dt.strftime('%d/%m/%Y')
 
     df_nuevo['Código Banco'] = df['Banco emisor'].apply(lambda x: obtener_codigo_banco(x, df_codigos))
-    df_nuevo['Nombre Banco'] = ''
+    df_nuevo['Nombre Banco'] = df.get('Banco emisor', '')
     df_nuevo['Plaza Código Postal'] = df.get('C.P del cheque', '')
     df_nuevo['Número Cheque'] = df.get('Nº de cheque', '')
     df_nuevo['Cuenta Librador'] = ''
-    df_nuevo['CUIT Librador'] = df.get('CUIT/CUIL/CDI.2', '')
+    df_nuevo['CUIT Librador'] = df.iloc[:, 17]
     df_nuevo['Nombre Librador'] = df.get('Razón social', '')
-    df_nuevo['Observaciones'] =  df.get('Cláusula', '')
+    df_nuevo['Observaciones'] =  df.iloc[:, 1]
     df_nuevo['Propio SI o NO'] = ''
     df_nuevo['Cuit Ultimo Endoso'] = ''
     df_nuevo['Responsable'] = df.get('Responsable', '')
+    df_nuevo['Numero cliento'] = df.iloc[:, 19]
     
     # máscara: contiene la palabra 'no' como palabra independiente (captura "no", "no a la orden", etc.)
     mask_no = df_nuevo['Observaciones'].str.contains(r'\bno\b', case=False, na=False)
@@ -52,4 +55,5 @@ def procesar_cheques(df, df_codigos):
     # Asegurar que sea la ÚLTIMA columna y con ese nombre
     cols = [c for c in df_nuevo.columns if c != 'Responsable'] + ['Responsable']
     df_nuevo = df_nuevo[cols]
+    
     return df_nuevo

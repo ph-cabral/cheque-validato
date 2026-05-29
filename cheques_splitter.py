@@ -2,7 +2,7 @@
 import pandas as pd
 from excel_utils import formatear_excel
 
-columns = [
+columns_mag = [
         'Nombre Librador',
         'CUIT Librador',
         'Importe',
@@ -11,6 +11,18 @@ columns = [
         'Plaza Código Postal', 
         'Observaciones']
 
+columns = [
+    'Número Cheque',
+    'Observaciones',
+    'Dueño',
+    'Cliente CUIT/CUIL/CDI',
+    'Fecha Disponibilidad',
+    'Fecha Emisión',
+    'Importe',
+    'Nombre Banco',
+    'CUIT Librador',
+    'Plaza Código Postal'
+    ]
 
 def _agrupar_con_subtotales(df):
     """Mantiene filas y agrega subtotal de Importe debajo de cada CUIT Librador."""
@@ -19,9 +31,9 @@ def _agrupar_con_subtotales(df):
 
     df = df.copy()
     df['Importe'] = pd.to_numeric(df['Importe'], errors='coerce')
-
     bloques = []
-    for cuit, grupo in df.groupby('CUIT Librador', sort=False, dropna=False):
+    for cuit, grupo in df.groupby('Cliente CUIT/CUIL/CDI', sort=False, dropna=False):
+    # for cuit, grupo in df.groupby(df.iloc[:, 3], sort=False, dropna=False):    
         bloques.append(grupo)
         fila_sum = pd.DataFrame([{c: None for c in df.columns}])
         fila_sum.at[0, 'Importe'] = grupo['Importe'].sum()

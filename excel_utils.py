@@ -3,25 +3,6 @@ from datetime import datetime
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 
-# def limpiar_fecha(valor):
-#     if pd.isna(valor):
-#         return pd.NaT
-#     if isinstance(valor, (int, float)):
-#         try:
-#             return pd.to_datetime('1899-12-30') + pd.to_timedelta(int(valor), unit='D')
-#         except:
-#             return pd.NaT
-#     if isinstance(valor, str):
-#         for fmt in ("%d/%m/%Y", "%Y-%m-%d", "%d-%m-%Y"):
-#             try:
-#                 return pd.to_datetime(datetime.strptime(valor.strip(), fmt))
-#             except:
-#                 pass
-#         return pd.to_datetime(valor, dayfirst=True, errors='coerce')
-#     if isinstance(valor, datetime):
-#         return pd.to_datetime(valor)
-#     return pd.NaT
-
 def limpiar_fecha(valor):
     """
     Convierte cualquier formato de fecha a datetime de pandas.

@@ -3,13 +3,23 @@ import pandas as pd
 from excel_utils import formatear_excel
 
 columns_mag = [
-        'Nombre Librador',
-        'CUIT Librador',
-        'Importe',
-        'Fecha Emisión', 
-        'Fecha Acreditación',
-        'Plaza Código Postal', 
-        'Observaciones']
+    'Fecha Recepción',
+    'Importe',
+    'Es Cheque Electrónico SI o NO',
+    'Fecha Emisión',
+    'Fecha Disponibilidad',
+    'Fecha Acreditación',
+    'Código Banco',
+    'Nombre Banco',
+    'Plaza Código Postal',
+    'Número Cheque',
+    'Cuenta Librador',
+    'CUIT Librador',
+    'Nombre Librador',
+    'Observaciones',
+    'Propio SI o NO',
+    'Cuit Ultimo Endoso',
+    'Responsable']
 
 columns = [
     'Número Cheque',
@@ -43,13 +53,24 @@ def _agrupar_con_subtotales(df):
 
 
 def dividir_por_responsable(df):
-    vals = df['Responsable'].fillna('').astype(str).str.strip().str.lower()
+    # for i, col in enumerate(df.columns):
+    #     print(i, col)
+    # df = df[columns_mag]
+    # print('......................................')
+    # for i, col in enumerate(df.columns):
+    #     print(i, col)
 
+    vals = df['Responsable'].fillna('').astype(str).str.strip().str.lower()
+    df['Importe'] = df['Importe'].astype(float)
+    df['Número Cheque'] = df['Número Cheque'].astype(int)
+    df['Código Banco'] = df['Número Cheque'].astype(int)
+    df['Plaza Código Postal'] = df['Número Cheque'].astype(int)
+    
     df_martin = df[vals.str.contains('martin|contado', na=False)].copy()
     df_lorena = df[vals.str.contains('lore g|anticipado', na=False)].copy()
 
-    df_martin.to_excel("../martin.xlsx", index=False, sheet_name="Sheet 1")
-    df_lorena.to_excel("../lorena.xlsx", index=False, sheet_name="Sheet 1")
+    df_martin[columns_mag].to_excel("../martin.xlsx", index=False, sheet_name="Sheet 1")
+    df_lorena[columns_mag].to_excel("../lorena.xlsx", index=False, sheet_name="Sheet 1")
 
     _agrupar_con_subtotales(df_martin[columns]).to_excel(
         "../martin_sumados.xlsx", index=False, sheet_name="Sheet 1"
